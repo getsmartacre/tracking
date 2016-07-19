@@ -5,11 +5,11 @@
 (function(){
 s=document.createElement('script');
 s.async=1;
-s.src='//midigitalagency.github.io/tracking/pardot/1.1/pardot-referral.js';
+s.src='//getsmartacre.github.io/tracking/pardot/1.2/pardot-referral.js';
 n=document.getElementsByTagName('script')[0];
 n.parentNode.insertBefore(s,n);
 })();
-var miReferralTracker = {
+var smartacreReferralTracker = {
 td: 'example.com',
 pu: 'go.example.com',
 fs: 'First_Source',
