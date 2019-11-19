@@ -30,3 +30,26 @@ cn: 'Last_Campaign_Contact'
 };
 </script>
 ```
+
+### hubspot-referral.js
+
+```javascript
+<script type="text/javascript">
+(function(){
+s=document.createElement('script');
+s.async=1;
+s.src='//getsmartacre.github.io/tracking/pardot/1.0/hubspot-referral.js';
+n=document.getElementsByTagName('script')[0];
+n.parentNode.insertBefore(s,n);
+})();
+var smartacreReferralTracker = {
+td: 'example.com',
+pu: 'info.example.com',
+us: 'utm_source',
+um: 'utm_medium',
+ut: 'utm_term',
+uc: 'utm_content',
+un: 'utm_campaign'
+};
+</script>
+```
