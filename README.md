@@ -38,7 +38,7 @@ cn: 'Last_Campaign_Contact'
 (function(){
 s=document.createElement('script');
 s.async=1;
-s.src='//getsmartacre.github.io/tracking/pardot/1.0/hubspot-referral.js';
+s.src='//getsmartacre.github.io/tracking/hubspot/1.0/hubspot-referral.js';
 n=document.getElementsByTagName('script')[0];
 n.parentNode.insertBefore(s,n);
 })();
