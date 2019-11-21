@@ -44,7 +44,6 @@ n.parentNode.insertBefore(s,n);
 })();
 var smartacreReferralTracker = {
 td: 'example.com',
-pu: 'info.example.com',
 us: 'utm_source',
 um: 'utm_medium',
 ut: 'utm_term',
