@@ -158,12 +158,23 @@
 
 	}
 
+	// Marketo forms ready
+	function marketoFormsReady() {
+		if ( typeof MktoForms2 != "undefined") {
+			MktoForms2.whenReady(function (form){
+				trackReferrals();
+			});
+		} else {
+			trackReferrals();
+		}
+	}
+
 	// Document ready
 	if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
-		trackReferrals();
+		marketoFormsReady();
 	} else {
-		document.addEventListener("DOMContentLoaded", trackReferrals);
-		window.addEventListener( "load", trackReferrals );
+		document.addEventListener("DOMContentLoaded", marketoFormsReady);
+		window.addEventListener( "load", marketoFormsReady );
 	}
 
 })();
