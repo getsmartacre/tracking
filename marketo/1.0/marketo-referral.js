@@ -158,12 +158,12 @@
 
 	}
 
-	if (window.addEventListener) {
-		window.addEventListener("load", trackReferrals, false);
-	} else if (window.attachEvent) {
-		window.attachEvent("onload", trackReferrals);
+	// Document ready similar to jQuery
+	if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+		trackReferrals();
 	} else {
-		window.onload = trackReferrals;
+		document.addEventListener("DOMContentLoaded", trackReferrals);
+		window.addEventListener( "load", trackReferrals );
 	}
 
 })();
