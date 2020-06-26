@@ -160,7 +160,7 @@
 
 	// Marketo forms ready
 	function marketoFormsReady() {
-		if ( typeof MktoForms2 != "undefined") {
+		if (typeof MktoForms2 != "undefined") {
 			MktoForms2.whenReady(function (form){
 				trackReferrals();
 			});
