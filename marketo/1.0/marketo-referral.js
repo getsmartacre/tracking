@@ -174,7 +174,7 @@
 		marketoFormsReady();
 	} else {
 		document.addEventListener("DOMContentLoaded", marketoFormsReady);
-		window.addEventListener( "load", marketoFormsReady );
+		window.addEventListener("load", marketoFormsReady);
 	}
 
 })();
