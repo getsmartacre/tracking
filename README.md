@@ -60,7 +60,7 @@ un: 'utm_campaign'
 (function(){
 s=document.createElement('script');
 s.async=1;
-s.src='//getsmartacre.github.io/tracking/marketo/1.0/marketo-referral.js';
+s.src='//getsmartacre.github.io/tracking/marketo/1.1/marketo-referral.js';
 n=document.getElementsByTagName('script')[0];
 n.parentNode.insertBefore(s,n);
 })();
@@ -70,7 +70,10 @@ us: 'utm_source',
 um: 'utm_medium',
 ut: 'utm_term',
 uc: 'utm_content',
-un: 'utm_campaign'
+un: 'utm_campaign',
+ua: 'utm_adgroup',
+ud: 'utm_device',
+uk: 'utm_keyword'
 };
 </script>
 ```
