@@ -5,7 +5,7 @@
 (function(){
 s=document.createElement('script');
 s.async=1;
-s.src='//getsmartacre.github.io/tracking/pardot/1.3/pardot-referral.js';
+s.src='//getsmartacre.github.io/tracking/pardot/1.4/pardot-referral.js';
 n=document.getElementsByTagName('script')[0];
 n.parentNode.insertBefore(s,n);
 })();
