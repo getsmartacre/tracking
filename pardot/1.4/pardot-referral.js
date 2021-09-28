@@ -149,7 +149,7 @@
 				for (var i = 0; i < p.length; i++) {
 					input = p[i].querySelector('input');
 					input.value = value;
-					console.log('querySelector: '+input);
+					console.log('querySelector: '+name+' input: '+input);
 				}
 
 			}
