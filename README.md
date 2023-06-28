@@ -66,14 +66,14 @@ n.parentNode.insertBefore(s,n);
 })();
 var smartacreReferralTracker = {
 td: 'example.com',
-us: 'utm_source',
-um: 'utm_medium',
-ut: 'utm_term',
-uc: 'utm_content',
-un: 'utm_campaign',
-ua: 'utm_adgroup',
-ud: 'utm_device',
-uk: 'utm_keyword'
+us: 'utmsource',
+um: 'utmmedium',
+ut: 'utmterm',
+uc: 'utmcontent',
+un: 'utmcampaign',
+ua: 'utmadgroup',
+ud: 'utmdevice',
+uk: 'utmkeyword'
 };
 </script>
 ```
