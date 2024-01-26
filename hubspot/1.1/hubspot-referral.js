@@ -158,13 +158,13 @@
 
 	}
 
-	if (window.addEventListener) {
-		window.addEventListener("load", trackReferrals, false);
-	} else if (window.attachEvent) {
-		window.attachEvent("onload", trackReferrals);
-	} else {
-		window.onload = trackReferrals;
-	}
+	window.addEventListener('message', event => {
+		if (event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormReady') {
+			trackReferrals();
+		}
+	});
+
+	window.addEventListener('load', trackReferrals, false);
 
 	trackReferrals();
 
