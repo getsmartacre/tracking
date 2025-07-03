@@ -116,7 +116,6 @@
 		if (inputs.length > 0) {
 			for (var i = 0; i < inputs.length; i++) {
 				inputs[i].value = value;
-				console.log(`Setting ${name} to ${value}`);
 			}
 		}
 	}
