@@ -128,6 +128,11 @@
 
 	// Main function to set referral data within form fields
 	function trackReferrals(isMultiStep = false, form = null) {
+		// If multi-step but no form, something went wrong, exit
+		if (isMultiStep && !form) {
+			return;
+		}
+
 		var tracker = smartacreReferralTracker,
 			newReferral = getReferral(tracker.td),
 			cLast = getCookie("smartacre_referral"),
