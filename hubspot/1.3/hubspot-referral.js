@@ -267,7 +267,7 @@
 					tLast = false;
 				}
 			} catch (e) {
-				// Invalid JSON, treat as no cookie
+				console.warn('[hubspot-referral] Failed to parse smartacre_referral cookie:', e);
 				tLast = false;
 			}
 		} else if (newReferral) {
@@ -275,7 +275,7 @@
 			try {
 				setCookie("smartacre_referral", JSON.stringify(tLast), false, tracker.td);
 			} catch (e) {
-				// Cookie setting failed, continue anyway
+				console.warn('[hubspot-referral] Failed to set smartacre_referral cookie:', e);
 			}
 		}
 
@@ -337,7 +337,7 @@
 			const form = HubSpotFormsV4.getFormFromEvent(event);
 			trackReferrals(true, form);
 		} catch (e) {
-			// Silently fail if form API call fails
+			console.warn('[hubspot-referral] HubSpot v4 form API error:', e);
 		}
 	});
 
