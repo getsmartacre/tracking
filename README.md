@@ -1,3 +1,25 @@
+### hubspot-referral.js
+
+```javascript
+<script type="text/javascript">
+(function(){
+s=document.createElement('script');
+s.async=1;
+s.src='//getsmartacre.github.io/tracking/hubspot/1.3/hubspot-referral.js';
+n=document.getElementsByTagName('script')[0];
+n.parentNode.insertBefore(s,n);
+})();
+var smartacreReferralTracker = {
+td: 'example.com',
+us: 'utm_source',
+um: 'utm_medium',
+ut: 'utm_term',
+uc: 'utm_content',
+un: 'utm_campaign'
+};
+</script>
+```
+
 ### pardot-referral.js
 
 ```javascript
@@ -27,28 +49,6 @@ cm: 'Last_Medium_Contact',
 ct: 'Last_Term_Contact',
 cc: 'Last_Content_Contact',
 cn: 'Last_Campaign_Contact'
-};
-</script>
-```
-
-### hubspot-referral.js
-
-```javascript
-<script type="text/javascript">
-(function(){
-s=document.createElement('script');
-s.async=1;
-s.src='//getsmartacre.github.io/tracking/hubspot/1.3/hubspot-referral.js';
-n=document.getElementsByTagName('script')[0];
-n.parentNode.insertBefore(s,n);
-})();
-var smartacreReferralTracker = {
-td: 'example.com',
-us: 'utm_source',
-um: 'utm_medium',
-ut: 'utm_term',
-uc: 'utm_content',
-un: 'utm_campaign'
 };
 </script>
 ```
