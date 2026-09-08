@@ -5,7 +5,7 @@
 (function(){
 s=document.createElement('script');
 s.async=1;
-s.src='//getsmartacre.github.io/tracking/hubspot/1.3/hubspot-referral.js';
+s.src='//getsmartacre.github.io/tracking/hubspot/1.4/hubspot-referral.js';
 n=document.getElementsByTagName('script')[0];
 n.parentNode.insertBefore(s,n);
 })();
