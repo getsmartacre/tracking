@@ -210,28 +210,37 @@
 		}
 	}
 
-	// Value setting for multi-step forms
-	function setMultiStepValue(name, value, form) {
-		if (!name || typeof name !== 'string' || 
-		    value === null || value === undefined ||
-		    !form || typeof form.setFieldValue !== 'function') {
-			return;
-		}
-		
+	// Value setting for V4 forms — checks field existence before setting to avoid uncaught async errors
+	async function setV4FormValues(form, fieldMappings) {
 		try {
-			// Sanitize field name to prevent path traversal
-			var sanitizedName = name.replace(/[^a-zA-Z0-9_-]/g, '');
-			if (!sanitizedName) {
-				return;
+			var existing = await form.getFormFieldValues();
+			var fieldSet = {};
+			if (Array.isArray(existing)) {
+				existing.forEach(function (f) {
+					if (f && f.name) { fieldSet[f.name] = true; }
+				});
 			}
-			
-			var fieldName = `0-1/${sanitizedName}`;
-			// Sanitize value
-			var sanitizedValue = String(value).substring(0, 1000);
-			
-			form.setFieldValue(fieldName, sanitizedValue);
+			fieldMappings.forEach(function (mapping) {
+				if (!mapping.field || mapping.value === undefined || mapping.value === null || mapping.value === '-') { 
+					return; 
+				}
+
+				var sanitizedName = mapping.field.replace(/[^a-zA-Z0-9_-]/g, '');
+
+				if (!sanitizedName) { 
+					return; 
+				}
+
+				var fieldName = '0-1/' + sanitizedName;
+
+				if (!fieldSet[fieldName]) { 
+					return; 
+				} // not on this form, skip
+
+				form.setFieldValue(fieldName, String(mapping.value).substring(0, 1000));
+			});
 		} catch (e) {
-			// Silently fail on form API errors
+			console.warn('[hubspot-referral] Error setting V4 form field values:', e);
 		}
 	}
 
@@ -289,13 +298,12 @@
 				{ field: tracker.un, value: tLast.campaign }
 			];
 
-			for (var i = 0; i < fieldMappings.length; i++) {
-				var mapping = fieldMappings[i];
-				
-				if (mapping.field && mapping.value !== undefined && mapping.value !== null) {
-					if (isMultiStep && form) {
-						setMultiStepValue(mapping.field, mapping.value, form);
-					} else {
+			if (isMultiStep && form) {
+				setV4FormValues(form, fieldMappings);
+			} else {
+				for (var i = 0; i < fieldMappings.length; i++) {
+					var mapping = fieldMappings[i];
+					if (mapping.field && mapping.value !== undefined && mapping.value !== null && mapping.value !== '-') {
 						setValue(mapping.field, mapping.value);
 					}
 				}
