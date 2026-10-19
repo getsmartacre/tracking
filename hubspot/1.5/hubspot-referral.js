@@ -210,34 +210,16 @@
 		}
 	}
 
-	// Value setting for V4 forms — checks field existence before setting to avoid uncaught async errors
+	// Value setting for V4 forms — pure setter, eligibility filtering is handled upstream
 	async function setV4FormValues(form, fieldMappings) {
 		try {
-			var existing = await form.getFormFieldValues();
-			var fieldSet = {};
-			if (Array.isArray(existing)) {
-				existing.forEach(function (f) {
-					if (f && f.name) { fieldSet[f.name] = true; }
-				});
-			}
-			fieldMappings.forEach(function (mapping) {
-				if (!mapping.field || mapping.value === undefined || mapping.value === null || mapping.value === '-') { 
-					return; 
+			fieldMappings.forEach(function(mapping) {
+				if (!mapping.field || mapping.value === undefined || mapping.value === null || mapping.value === '-') {
+					return;
 				}
-
 				var sanitizedName = mapping.field.replace(/[^a-zA-Z0-9_-]/g, '');
-
-				if (!sanitizedName) { 
-					return; 
-				}
-
-				var fieldName = '0-1/' + sanitizedName;
-
-				if (!fieldSet[fieldName]) { 
-					return; 
-				} // not on this form, skip
-
-				form.setFieldValue(fieldName, String(mapping.value).substring(0, 1000));
+				if (!sanitizedName) { return; }
+				form.setFieldValue('0-1/' + sanitizedName, String(mapping.value).substring(0, 1000));
 			});
 		} catch (e) {
 			console.warn('[hubspot-referral] Error setting V4 form field values:', e);
@@ -334,27 +316,47 @@
 		}
 	});
 
-	window.addEventListener('hs-form-event:on-ready', (event) => {
+	window.addEventListener('hs-form-event:on-ready', async (event) => {
 		// Validate HubSpotFormsV4 API exists
 		if (typeof HubSpotFormsV4 === 'undefined' || 
 		    typeof HubSpotFormsV4.getFormFromEvent !== 'function') {
 			return;
 		}
 
+		if (typeof smartacreReferralTracker === 'undefined' || !smartacreReferralTracker) {
+			return;
+		}
+
+		var tracker = smartacreReferralTracker;
+		if (!tracker.us || !tracker.um || !tracker.ut || !tracker.uc || !tracker.un) {
+			return;
+		}
+
 		try {
 			const form = HubSpotFormsV4.getFormFromEvent(event);
-			trackReferrals(true, form);
+			var fieldNames = [tracker.us, tracker.um, tracker.ut, tracker.uc, tracker.un];
+			var qualified = await getFormsWithUTMFields([form], fieldNames);
+			if (qualified.length) { trackReferrals(true, form); }
 		} catch (e) {
 			console.warn('[hubspot-referral] HubSpot v4 form API error:', e);
 		}
 	});
 
 	// Check for HubSpot V4 forms that have already initialized before the event listener was registered
-	function checkExistingV4Forms() {
+	async function checkExistingV4Forms() {
 		if (
 			!window.HubSpotFormsV4 ||
 			typeof window.HubSpotFormsV4.getForms !== 'function'
 		) {
+			return;
+		}
+
+		if (typeof smartacreReferralTracker === 'undefined' || !smartacreReferralTracker) {
+			return;
+		}
+
+		var tracker = smartacreReferralTracker;
+		if (!tracker.us || !tracker.um || !tracker.ut || !tracker.uc || !tracker.un) {
 			return;
 		}
 
@@ -365,14 +367,39 @@
 				return;
 			}
 
-			forms.forEach(function(form) {
-				if (form && typeof form.setFieldValue === 'function') {
-					trackReferrals(true, form);
-				}
-			});
+			var fieldNames = [tracker.us, tracker.um, tracker.ut, tracker.uc, tracker.un];
+			var qualified = await getFormsWithUTMFields(forms, fieldNames);
+			qualified.forEach(function(form) { trackReferrals(true, form); });
 		} catch (e) {
 			console.warn('[hubspot-referral] Error checking existing V4 forms:', e);
 		}
+	}
+
+	// Returns the subset of forms that have all required UTM fields in their field list.
+	// Uses getFormFieldValues() to inspect each form before attempting any writes.
+	async function getFormsWithUTMFields(forms, fieldNames) {
+		var qualified = [];
+		for (var i = 0; i < forms.length; i++) {
+			var form = forms[i];
+			if (!form || typeof form.setFieldValue !== 'function') { continue; }
+			try {
+				var existing = await form.getFormFieldValues();
+				var fieldSet = {};
+				if (Array.isArray(existing)) {
+					existing.forEach(function(f) {
+						if (f && f.name) { fieldSet[f.name] = true; }
+					});
+				}
+				var allPresent = fieldNames.every(function(name) {
+					var sanitized = name.replace(/[^a-zA-Z0-9_-]/g, '');
+					return sanitized && fieldSet['0-1/' + sanitized];
+				});
+				if (allPresent) { qualified.push(form); }
+			} catch (e) {
+				console.warn('[hubspot-referral] Error checking form fields:', e);
+			}
+		}
+		return qualified;
 	}
 
 	// Handle forms and referrals immediately
